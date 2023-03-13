@@ -588,7 +588,7 @@ const columns = ref<DataTableColumns>([
                         const userMenuKey = Number(key.replace("user-", ""));
                         const keyMenu = userMenu.value[userMenuKey];
                         if (keyMenu) {
-                          getFile(row.id).then((res: any) => {
+                          getFastFile(row.id).then((res: any) => {
                             const render = (template: string) => {
                               return template.replace(
                                 /\{\{(.*?)\}\}/g,
@@ -745,6 +745,18 @@ const getFile = (id: string) => {
     .then((res) => {
       return res;
     });
+};
+const getFastFile: any = (id: string) => {
+  return getFile(id).then((res: any) => {
+    if (
+      res.data.medias &&
+      res.data.medias.length > 0 &&
+      (res.data.medias[0]?.link?.url).includes("dl-a10b-0394.mypikpak.com")
+    ) {
+      return getFastFile(id);
+    }
+    return res;
+  });
 };
 const showVideo = ref(false);
 const showImage = ref(false);
